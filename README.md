@@ -23,10 +23,7 @@ pip install -r requirements.txt
 
 ### Example Workflow
 
-1. **Preprocess Data**: Use the `DataPreprocessor` class to load and preprocess measurement data.
-2. **Define Models**: Extend the `BaseModel` class to define your custom model.
-3. **Optimization**: Use the optimization modules to estimate parameters.
-4. **Analyze Results**: Perform sensitivity analysis and interpret the results.
+**TODO**: Update this section with a correct code example.
 
 ### Code Example
 
