@@ -1,4 +1,4 @@
-# bifit: Fitting Bifurcation Measurements Using External Controls
+# bifit: Bifurcation-Based Parameter Estimation
 
 `bifit` is a Python package designed for parameter estimation and *a posteriori* sensitivity analysis using measurements of applied controls at bifurcation points.
 
