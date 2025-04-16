@@ -1,0 +1,28 @@
+[build-system]
+requires = [
+    "setuptools >=61",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bifit"
+description = "Parameter estimation using measurements of bifurcation points"
+readme = "README.md"
+maintainers = [
+    { name = "Hridya Varma", email = "hridya13@gmail.com" },
+]
+version = "0.0.1"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+]
+
+[tool.setuptools]
+packages = [
+    "bifit",
+]
