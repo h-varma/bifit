@@ -18,3 +18,33 @@
     </section>
   {% endfor %}
 {% endblock %}
+
+{% block nav_members %}
+  {% if module.members %}
+    <h2>API Documentation</h2>
+    <ul class="memberlist">
+      {# only include public items that are NOT variables #}
+      {% for m in module.members.values()
+            if is_public(m) | trim and m.kind != "variable" %}
+        <li>
+          {% if m.kind == "class" %}
+            <a class="class" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+            {%- if m.own_members %}
+              {{ nav_members(m.own_members) | indent(12) }}
+            {%- endif %}
+          {% elif m.kind == "module" %}
+            <a class="module" href="#{{ m.name }}">{{ m.name }}</a>
+          {% elif m.name == "__init__" %}
+            <a class="function" href="#{{ m.qualname }}">
+              {{ m.qualname.split(".")[-2] }}
+            </a>
+          {% else %}
+            <a class="{{ m.kind }}" href="#{{ m.qualname }}">
+              {{ m.name }}
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
