@@ -36,7 +36,3 @@ Comprehensive documentation is available at [https://h-varma.github.io/bifit/](h
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## Acknowledgments
-
-Special thanks to the Scientific Software Center at Heidelberg University for their courses and templates, which helped in the creation of this project.
