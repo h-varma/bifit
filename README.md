@@ -14,7 +14,7 @@
 To install `bifit`, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/yourusername/bifit.git
+git clone https://github.com/h-varma/bifit.git
 cd bifit
 pip install -r requirements.txt
 ```
