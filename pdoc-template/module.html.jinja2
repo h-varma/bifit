@@ -1,18 +1,19 @@
 {% extends "default/module.html.jinja2" %}
 
 {% block module_contents %}
-  {# Iterate over each top-level member of the module… #}
-  {% for member in module.flattened_own_members if is_public(member) | trim %}
-    <section id="{{ member.qualname or member.name }}">
-      {{ member(member) }}
+  {# top-level members of this module #}
+  {% for obj in module.flattened_own_members if is_public(obj) | trim %}
+    <section id="{{ obj.qualname or obj.name }}">
+      {{ member(obj) }}
 
-      {# If it's a class, only show its methods (kind == "function") #}
-      {% if member.kind == "class" %}
-        {% for m in member.own_members
-              if m.kind == "function" and is_public(m) | trim %}
-          {{ member(m) }}
+      {# if it's a class, only render its functions (no variables) #}
+      {% if obj.kind == "class" %}
+        {% for fn in obj.own_members
+              if fn.kind == "function" and is_public(fn) | trim %}
+          <div id="{{ fn.qualname }}" class="classfunc">
+            {{ member(fn) }}
+          </div>
         {% endfor %}
-        {# — no loop over variables, no inherited-members block — #}
       {% endif %}
     </section>
   {% endfor %}
