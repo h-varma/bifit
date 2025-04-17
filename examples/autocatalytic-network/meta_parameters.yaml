@@ -1,0 +1,76 @@
+model_name: 'autocatalytic'
+
+# IVP solver
+
+t_end: 1000
+
+# one-parameter bifurcation diagram
+
+bifurcation:
+  type: 'saddle-node'
+
+# two-parameter bifurcation diagram
+
+two_parameter_continuation_method: 'deflated'  
+
+# parameter estimation problem
+
+residual:
+  scale: 'linear'
+  type: 'absolute'
+
+# model compartments - order should match that of model equations
+
+compartment_1:
+  name: 'A'
+  value: 0
+
+compartment_2:
+  name: 'I'
+  value: 0
+
+compartment_3:
+  name: 'S'
+  value: 0
+
+to_plot: 'A'
+
+# model parameters and controls
+
+parameter_1:
+  name: 'k0'
+  type: 'global'
+  default_value: 0.003
+
+parameter_2:
+  name: 'k1'
+  type: 'global'
+  default_value: 0.25
+
+parameter_3:
+  name: 'k2'
+  type: 'fixed'
+  default_value: 300
+
+parameter_4:
+  name: 'k3'
+  type: 'fixed'
+  default_value: 0.0035
+
+parameter_5:
+  name: 'k4'
+  type: 'fixed'
+  default_value: 0.00007
+
+parameter_6:
+  name: 'I0'
+  type: 'control_2'
+  default_value: 0.004
+
+parameter_7:
+  name: 'S0'
+  type: 'control_1'
+  default_value: 0.05
+  min_value: 0.001
+  max_value: 0.5
+  step_size: 0.001

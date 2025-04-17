@@ -1,0 +1,103 @@
+model_name: 'predator_prey'
+
+# IVP solver
+
+t_end: 50
+
+# one-parameter bifurcation diagram
+
+bifurcation:
+  type: 'hopf'
+
+# two-parameter bifurcation diagram
+
+two_parameter_continuation_method: 'pseudo-arclength'  
+
+# parameter estimation problem
+
+residual:
+  scale: 'linear'
+  type: 'absolute'
+
+# model compartments - order should match that of model equations
+
+compartment_1:
+  name: 'N'
+  value: 6
+  description: 'Nitrogen concentration'
+
+compartment_2:
+  name: 'C'
+  value: 5
+  description: 'Concentration of prey'
+
+compartment_3:
+  name: 'R'
+  value: 1
+  description: 'Concentration of reproducing predator'
+
+compartment_4:
+  name: 'B'
+  value: 4
+  description: 'Total concentration of predator'
+
+to_plot: 'N'
+
+# model parameters and controls
+
+parameter_1:
+  name: 'delta'
+  type: 'control_2'
+  default_value: 0.05
+  description: 'Dilution rate'
+
+parameter_2:
+  name: 'Ni'
+  type: 'control_1'
+  default_value: 160
+  description: 'Nitrogen inflow'
+  min_value: 10
+  max_value: 1000
+  step_size: 5  
+
+parameter_3:
+  name: 'Bc'
+  type: 'global'
+  default_value: 3.3
+  description: 'Maximum growth rate of prey'
+
+parameter_4:
+  name: 'Kc'
+  type: 'fixed'
+  default_value: 4.3
+  description: 'Half-saturation constant of prey'
+
+parameter_5:
+  name: 'Bb'
+  type: 'global'
+  default_value: 2.25
+  description: 'Maximum growth rate of predator'
+
+parameter_6:
+  name: 'Kb'
+  type: 'fixed'
+  default_value: 15
+  description: 'Half-saturation constant of predator'
+
+parameter_7:
+  name: 'epsilon'
+  type: 'fixed'
+  default_value: 0.25
+  description: 'Efficiency of predator assimilation'
+
+parameter_8:
+  name: 'm'
+  type: 'fixed'
+  default_value: 0.055
+  description: 'Predator mortality rate'
+
+parameter_9:
+  name: 'lambda'
+  type: 'fixed'
+  default_value: 0.4
+  description: 'Decay of predator reproduction'

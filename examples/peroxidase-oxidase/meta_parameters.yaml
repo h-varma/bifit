@@ -1,0 +1,94 @@
+model_name: 'steinmetz_larter'
+
+# IVP solver
+
+t_end: 200
+
+# one-parameter bifurcation diagram
+
+bifurcation:
+  type: 'hopf'
+
+# two-parameter bifurcation diagram
+
+two_parameter_continuation_method: 'pseudo-arclength'   
+
+# parameter estimation problem
+
+residual:
+  scale: 'linear'
+  type: 'absolute'
+
+# model compartments - order should match that of model equations
+
+compartment_1:
+  name: 'A'
+  value: 0
+  description: 'O2 concentration'
+
+compartment_2:
+  name: 'B'
+  value: 0
+  description: 'NADH concentration'
+
+compartment_3:
+  name: 'X'
+  value: 0
+  description: 'Intermediate concentration'
+
+compartment_4:
+  name: 'Y'
+  value: 0
+  description: 'Intermediate concentration'
+
+to_plot: 'A'
+
+# model parameters and controls
+
+parameter_1:
+  name: 'k1'
+  type: 'global'
+  default_value: 0.1631021
+
+parameter_2:
+  name: 'k2'
+  type: 'fixed'
+  default_value: 1250
+
+parameter_3:
+  name: 'k3'
+  type: 'fixed'
+  default_value: 0.046875
+
+parameter_4:
+  name: 'k4'
+  type: 'fixed'
+  default_value: 20
+
+parameter_5:
+  name: 'k5'
+  type: 'global'
+  default_value: 1.104
+
+parameter_6:
+  name: 'k6'
+  type: 'fixed'
+  default_value: 0.001
+
+parameter_7:
+  name: 'k7'
+  type: 'control_1'
+  default_value: 4.24
+  min_value: 1
+  max_value: 100
+  step_size: 0.5
+
+parameter_8:
+  name: 'km7'
+  type: 'fixed'
+  default_value: 0.1175
+
+parameter_9:
+  name: 'k8'
+  type: 'control_2'
+  default_value: 0.53  

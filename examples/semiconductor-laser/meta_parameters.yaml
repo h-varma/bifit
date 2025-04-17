@@ -1,0 +1,66 @@
+model_name: 'laser'
+
+# IVP solver
+
+t_end: 200
+
+# one-parameter bifurcation diagram
+
+bifurcation:
+  type: 'saddle-node'
+
+# two-parameter bifurcation diagram
+
+two_parameter_continuation_method: 'deflated'
+
+# parameter estimation problem
+
+residual:
+  scale: 'linear'
+  type: 'absolute'
+
+# model compartments - order should match that of model equations
+
+compartment_1:
+  name: 'Ex'
+  value: 0
+
+compartment_2:
+  name: 'Ey'
+  value: 0
+
+compartment_3:
+  name: 'n'
+  value: 0
+
+to_plot: 'Ex'
+
+# model parameters and controls
+
+parameter_1:
+  name: 'K'
+  type: 'control_1'
+  default_value: 2
+  min_value: -100
+  max_value: 100
+  step_size: 0.5  
+
+parameter_2:
+  name: 'alpha'
+  type: 'global'
+  default_value: 2.6
+
+parameter_3:
+  name: 'omega'
+  type: 'control_2'
+  default_value: 2
+
+parameter_4:
+  name: 'gamma'
+  type: 'fixed'
+  default_value: 0.0973
+
+parameter_5:
+  name: 'B'
+  type: 'global'
+  default_value: 0.0295
