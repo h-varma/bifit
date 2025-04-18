@@ -80,8 +80,8 @@ class DeflatedContinuation(Continuer):
         self.parameters = backward_parameters[::-1] + forward_parameters
         self.solutions = backward_solutions[::-1] + forward_solutions
 
-        self._remove_empty_lists()
-        self._sort_the_solutions()
+        self.__remove_empty_lists()
+        self.__sort_the_solutions()
 
     def _compute_solutions(self, direction: int):
         """
@@ -111,7 +111,7 @@ class DeflatedContinuation(Continuer):
                 while success or failed_attempts < self.max_failed_attempts:
                     x0 = np.copy(solution)
                     if len(self._solutions[-1]) > 0:
-                        x0 = self._add_noise(solution)
+                        x0 = self.__add_noise(solution)
                     sol = self._deflation_step(x0=x0, p=p)
                     if sol is None:
                         success = False
@@ -199,7 +199,7 @@ class DeflatedContinuation(Continuer):
         if x is None:
             return None
 
-        is_in_history = self._check_if_solution_already_exists(x)
+        is_in_history = self.__check_if_solution_already_exists(x)
         return None if is_in_history else x
 
     def _deflation_step(self, x0: np.ndarray, p: float) -> np.ndarray:
@@ -219,7 +219,7 @@ class DeflatedContinuation(Continuer):
             sol = self._join_x_and_p(_x, p)
             df = self.func(sol)
             for solution in known_solutions:
-                df = np.dot(self._deflation_operator(_x, solution), df)
+                df = np.dot(self.__deflation_operator(_x, solution), df)
             return df
 
         res = root(_deflated_corrector, x0=x0)
@@ -228,11 +228,11 @@ class DeflatedContinuation(Continuer):
         if x is None:
             return None
 
-        is_in_history = self._check_if_solution_already_exists(x)
+        is_in_history = self.__check_if_solution_already_exists(x)
         is_valid = self._check_if_solution_satisfies_ftol(x=x, p=p, ftol=1e-4)
         return x if is_valid and not is_in_history else None
 
-    def _deflation_operator(self, u: np.ndarray, ustar: np.ndarray) -> np.ndarray:
+    def __deflation_operator(self, u: np.ndarray, ustar: np.ndarray) -> np.ndarray:
         """
         Operator to deflate out known solutions.
 
@@ -255,7 +255,7 @@ class DeflatedContinuation(Continuer):
             return (1 + (1 / np.sum((u - ustar) ** 2))) * np.eye(len(u))
 
     @staticmethod
-    def _add_noise(x: np.ndarray) -> np.ndarray:
+    def __add_noise(x: np.ndarray) -> np.ndarray:
         """
         Add normally distributed noise to the input data.
 
@@ -271,7 +271,7 @@ class DeflatedContinuation(Continuer):
         a, b = -mean / stddev, np.inf
         return scipy.stats.truncnorm.rvs(a=a, b=b, loc=mean, scale=stddev)
 
-    def _check_if_solution_already_exists(self, x: np.ndarray) -> bool:
+    def __check_if_solution_already_exists(self, x: np.ndarray) -> bool:
         """
         Check if `x` is the same as a previously found result, differing only in their signs.
 
@@ -284,7 +284,7 @@ class DeflatedContinuation(Continuer):
         flag = [np.allclose(np.abs(x), np.abs(s), atol=0) for s in self._solutions[-1]]
         return True if True in flag else False
 
-    def _sort_the_solutions(self):
+    def __sort_the_solutions(self):
         """
         Sort steady states at a parameter value to continuously follow
         steady states from the previous parameter value.
@@ -295,12 +295,12 @@ class DeflatedContinuation(Continuer):
             if self.solutions[i].shape[0] < max_size:
                 idx = np.arange(self.solutions[i].shape[0], max_size)
                 for j in idx:
-                    self.solutions[i] = self._insert_nan_rows(self.solutions[i], j)
+                    self.solutions[i] = self.__insert_nan_rows(self.solutions[i], j)
 
         assert all([sol.shape[0] == max_size for sol in self.solutions])
 
     @staticmethod
-    def _insert_nan_rows(x: np.ndarray, idx: Union[int, list, slice]) -> np.ndarray:
+    def __insert_nan_rows(x: np.ndarray, idx: Union[int, list, slice]) -> np.ndarray:
         """
         Insert rows filled with nan into the input matrix.
 
@@ -314,7 +314,7 @@ class DeflatedContinuation(Continuer):
         return np.insert(x, idx, np.nan, axis=0)
 
     @staticmethod
-    def _size(X: np.ndarray) -> int:
+    def __size(X: np.ndarray) -> int:
         """
         Compute the number of non-nan rows in a matrix.
 
@@ -326,7 +326,7 @@ class DeflatedContinuation(Continuer):
         """
         return len([X[i, :] for i in range(X.shape[0]) if not any(np.isnan(X[i, :]))])
 
-    def _remove_empty_lists(self):
+    def __remove_empty_lists(self):
         """
         Remove empty solutions lists from the solutions and parameters.
         """
@@ -352,7 +352,7 @@ class DeflatedContinuation(Continuer):
         old = self._join_x_and_p(x=self.solutions[0], p=self.parameters[0])
         for i in range(1, len(self.solutions)):
             new = self._join_x_and_p(x=self.solutions[i], p=self.parameters[i])
-            change_in_solutions = self._size(new) - self._size(old)
+            change_in_solutions = self.__size(new) - self.__size(old)
 
             if 1 <= change_in_solutions <= 2:
                 for j in range(new.shape[0]):
@@ -374,7 +374,7 @@ class DeflatedContinuation(Continuer):
         branches = [branch[0] for branch in branches if len(branch) > 0]
         if len(branches):
             self.bifurcations_found = True
-        return self._select_bifurcation_point(branches=branches, parameter=parameter)
+        return self.__select_bifurcation_point(branches=branches, parameter=parameter)
 
     def detect_hopf_bifurcation(self, parameter: str) -> np.ndarray:
         """
@@ -386,12 +386,12 @@ class DeflatedContinuation(Continuer):
         Returns:
             np.ndarray: Hopf bifurcation point.
         """
-        old_eigvals = self._get_eigenvalues(self.solutions[0], self.parameters[0])
+        old_eigvals = self.__get_eigenvalues(self.solutions[0], self.parameters[0])
         old_signs = np.sign(old_eigvals.real)
 
         branches = [[]]
         for i in range(1, len(self.solutions)):
-            new_eigvals = self._get_eigenvalues(self.solutions[i], self.parameters[i])
+            new_eigvals = self.__get_eigenvalues(self.solutions[i], self.parameters[i])
             new_signs = np.sign(new_eigvals.real)
 
             if (old_signs != new_signs).any():
@@ -408,9 +408,9 @@ class DeflatedContinuation(Continuer):
             old_eigvals = new_eigvals
             old_signs = new_signs
 
-        return self._select_bifurcation_point(branches=branches, parameter=parameter)
+        return self.__select_bifurcation_point(branches=branches, parameter=parameter)
 
-    def _get_eigenvalues(self, solutions: np.ndarray, parameter: float) -> np.ndarray:
+    def __get_eigenvalues(self, solutions: np.ndarray, parameter: float) -> np.ndarray:
         """
         Compute the eigenvalues of the Jacobian matrix at each solution in solutions.
 
@@ -433,7 +433,7 @@ class DeflatedContinuation(Continuer):
                 eigenvalues.append(np.linalg.eigvals(jacobian_))
         return np.row_stack([eigenvalues])
 
-    def _select_bifurcation_point(self, branches: list, parameter: str) -> Union[np.ndarray, list]:
+    def __select_bifurcation_point(self, branches: list, parameter: str) -> Union[np.ndarray, list]:
         """
         Select one bifurcation point from the detected bifurcation points.
 
