@@ -2,7 +2,7 @@ import autograd.numpy as np
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from ..continuation.select_continuer import import_continuer
-from ..parameter_estimation.problem_generator import OptimizationProblemGenerator
+from ..estimation.problem_generator import OptimizationProblemGenerator
 from ..models.utils import dict_to_nparray, nparray_to_dict
 from ..postprocessing.plot_decorator import handle_plots
 

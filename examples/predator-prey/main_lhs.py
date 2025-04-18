@@ -9,8 +9,8 @@ from bifit.logging_ import logger
 from bifit.preprocessing.sampler import generate_samples_using_lhs
 from bifit.preprocessing.sampler import generate_samples_using_gaussian
 from bifit.preprocessing.preprocess_data import DataPreprocessor
-from bifit.parameter_estimation.initial_guess import InitialGuessGenerator
-from bifit.parameter_estimation.parameter_estimator import ParameterEstimator
+from bifit.estimation.initial_guess import InitialGuessGenerator
+from bifit.estimation.parameter_estimator import ParameterEstimator
 from bifit.postprocessing.pickler import create_folder_for_results
 from bifit.postprocessing.pickler import save_results_as_pickle
 import bifit.postprocessing.plot_decorator as plot_decorator

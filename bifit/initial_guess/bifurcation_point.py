@@ -1,6 +1,6 @@
 import autograd.numpy as np
 from ..optimization.single_experiment.select_optimizer import import_optimizer
-from ..parameter_estimation.problem_generator import OptimizationProblemGenerator
+from ..estimation.problem_generator import OptimizationProblemGenerator
 from ..models.utils import dict_to_nparray, nparray_to_dict
 from ..logging_ import logger
 

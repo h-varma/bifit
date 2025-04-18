@@ -10,8 +10,8 @@ import pickle
 import numpy as np
 from model_equations import Model
 from bifit.logging_ import logger
-from bifit.parameter_estimation.initial_guess import InitialGuessGenerator
-from bifit.parameter_estimation.parameter_estimator import ParameterEstimator
+from bifit.estimation.initial_guess import InitialGuessGenerator
+from bifit.estimation.parameter_estimator import ParameterEstimator
 import bifit.postprocessing.plot_decorator as plot_decorator
 
 

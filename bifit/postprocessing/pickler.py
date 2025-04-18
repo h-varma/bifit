@@ -2,7 +2,7 @@ import os
 import pickle
 import easygui
 from datetime import datetime
-from bifit.parameter_estimation.results import get_results
+from bifit.estimation.results import get_results
 
 
 def create_folder_for_results(path: str):

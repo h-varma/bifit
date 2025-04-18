@@ -2,7 +2,7 @@ import autograd.numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import container, lines
 from ..models.utils import nparray_to_dict
-from ..parameter_estimation.problem_generator import OptimizationProblemGenerator
+from ..estimation.problem_generator import OptimizationProblemGenerator
 from ..optimization.multi_experiment.select_optimizer import import_optimizer
 from ..postprocessing.plot_decorator import handle_plots
 from ..logging_ import logger
