@@ -72,7 +72,6 @@ class BaseModel(ABC):
             self.initial_parameters[_name] = _value
             self.parameters[_name] = {"value": _value, "vary": False}
 
-        logger.info(f"True model parameters: {self.true_parameters}")
         logger.info(f"Parameter guess initialization: {self.parameters}")
 
     def __getattr__(self, attr: str):
