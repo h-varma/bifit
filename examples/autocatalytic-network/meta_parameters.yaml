@@ -2,7 +2,7 @@ model_name: 'autocatalytic'
 
 # IVP solver
 
-t_end: 1000
+t_end: 2000
 
 # one-parameter bifurcation diagram
 
@@ -17,7 +17,7 @@ two_parameter_continuation_method: 'deflated'
 
 compartment_1:
   name: 'A'
-  value: 0
+  value: 1
 
 compartment_2:
   name: 'I'
@@ -67,4 +67,4 @@ parameter_7:
   default_value: 0.05
   min_value: 0.001
   max_value: 0.5
-  step_size: 0.001
+  step_size: 0.0001
