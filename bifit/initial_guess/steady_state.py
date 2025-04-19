@@ -25,7 +25,13 @@ def find_steady_state(model: object) -> tuple[np.ndarray, plt.Figure]:
     y0 = model.initial_state
     t_span = model.integration_interval
 
-    model.mask["compartments"] = True
+    model.mask = {
+        "compartments": True,
+        "controls": False,
+        "auxiliary_variables": False,
+        "global_parameters": False,
+    }
+
     logger.debug("Integrate the model equations to get a solution estimate.")
     sol = solve_ivp(lambda _, y: model.rhs_(y), y0=y0, t_span=t_span)
 

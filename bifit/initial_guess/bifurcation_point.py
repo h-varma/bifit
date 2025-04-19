@@ -25,6 +25,14 @@ def get_bifurcation_point(
     """
     parameter = model.controls["homotopy"]
 
+    model.mask = {
+        "compartments": True,
+        "controls": True,
+        "auxiliary_variables": False,
+        "global_parameters": False,
+    }
+    model.parameters[parameter]["vary"] = True
+
     assert len(branch) == len(model.compartments) + 1
     c, p, h = nparray_to_dict(x=branch, model=model)
 

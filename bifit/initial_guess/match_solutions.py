@@ -28,6 +28,15 @@ def match_solutions_to_data(model: object, solutions: list, fill_missing: bool) 
     h_param = model.controls["homotopy"]
     f_param = model.controls["free"]
 
+    model.mask = {
+        "compartments": True,
+        "controls": True,
+        "auxiliary_variables": True,
+        "global_parameters": False,
+    }
+    model.parameters[h_param]["vary"] = True
+    model.parameters[f_param]["vary"] = True
+
     if isinstance(solutions[0], list):
         solutions = list(chain.from_iterable(solutions))
     solutions = sorted(solutions, key=lambda x: get_parameter_value(x, type_="f", model=model))

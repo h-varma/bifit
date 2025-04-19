@@ -24,11 +24,21 @@ def trace_measured_bifurcations(
     Returns:
         tuple[np.ndarray, plt.Figure]: Set of bifurcation points in two parameters and the figure object.
     """
+
+    model.mask = {
+        "compartments": True,
+        "controls": True,
+        "auxiliary_variables": True,
+        "global_parameters": False,
+    }
+
     Continuer = import_continuer(continuer_name)
     homotopy_parameter = model.controls["homotopy"]
     free_parameter = model.controls["free"]
 
     data = np.unique([d[homotopy_parameter] for d in model.data])
+
+    model.parameters[homotopy_parameter]["vary"] = True
 
     c, p, h = nparray_to_dict(x=x0, model=model)
     p0 = p[homotopy_parameter]

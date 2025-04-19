@@ -30,7 +30,12 @@ def compute_steady_state_curve(
     # continue the steady state solutions along the homotopy parameter
     parameter = model.controls["homotopy"]
 
-    model.mask["controls"] = True
+    model.mask = {
+        "compartments": True,
+        "controls": True,
+        "auxiliary_variables": False,
+        "global_parameters": False,
+    }
     model.parameters[parameter]["vary"] = True
 
     Continuer = import_continuer(continuer_name)
