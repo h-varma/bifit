@@ -4,7 +4,6 @@ from ..initial_guess.steady_state_curve import compute_steady_state_curve
 from ..initial_guess.bifurcation_point import get_bifurcation_point
 from ..initial_guess.trace_data import trace_measured_bifurcations
 from ..initial_guess.match_solutions import match_solutions_to_data
-from ..models.utils import nparray_to_dict
 from ..logging_ import logger
 
 
@@ -13,12 +12,16 @@ class InitialGuessGenerator:
     Generates initial guesses for the parameter estimation problem.
     """
 
-    def __init__(self):
+    def __init__(self, automate_bifurcation_selection: bool = False):
         """
         Initializes the initial guess generator.
+
+        Args:
+            automate_bifurcation_selection (bool): If True, automatically selects a bifurcation point.
         """
         self.model = None
         self.branches = []
+        self.automate_bifurcation_selection = automate_bifurcation_selection
 
     def generate_initial_guess(self, model: object):
         """
@@ -45,10 +48,16 @@ class InitialGuessGenerator:
                 }
                 self.branches, _ = compute_steady_state_curve(x0=self.steady_state, **kwargs)
 
+            if self.automate_bifurcation_selection or len(self.branches) == 1:
+                idx = 0
+            else:
+                idx = int(input("Select a bifurcation point for continuation: "))
+                idx = idx - 1
+
             # Step 3: Get the exact bifurcation point from the approximation
             logger.info("Step 3: Get the exact bifurcation point from the approximation.")
             kwargs = {"model": self.model, "optimizer_name": "scipy"}
-            self.bifurcation_point = get_bifurcation_point(branch=self.branches[0], **kwargs)
+            self.bifurcation_point = get_bifurcation_point(branch=self.branches[idx], **kwargs)
 
             # Step 4: Continue the bifurcation point to trace the data
             logger.info("Step 4: Trace a two-parameter bifurcation diagram along the data.")
