@@ -65,7 +65,7 @@ class BaseModel(ABC):
             if _name in self.global_parameters:
                 if parameters is not None:
                     _value = float(parameters[i])
-                i += 1
+                    i += 1
             elif _name in list(self.controls.values()):
                 if controls is not None:
                     _value = controls[_name]
