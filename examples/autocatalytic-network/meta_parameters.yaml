@@ -11,13 +11,7 @@ bifurcation:
 
 # two-parameter bifurcation diagram
 
-two_parameter_continuation_method: 'deflated'  
-
-# parameter estimation problem
-
-residual:
-  scale: 'linear'
-  type: 'absolute'
+two_parameter_continuation_method: 'deflated'
 
 # model compartments - order should match that of model equations
 

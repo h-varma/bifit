@@ -131,8 +131,7 @@ class YamlParser:
             "two_parameter_continuation_method"
         ]
 
-        residual = self.meta_parameters["residual"]
-        kwargs["measurement_error"] = residual["type"] + "_" + residual["scale"]
+        kwargs["measurement_error"] = "absolute_linear"
 
         kwargs["exclude_states"] = []
         try:

@@ -13,12 +13,6 @@ bifurcation:
 
 two_parameter_continuation_method: 'deflated'
 
-# parameter estimation problem
-
-residual:
-  scale: 'linear'
-  type: 'absolute'
-
 # model compartments - order should match that of model equations
 
 compartment_1:
