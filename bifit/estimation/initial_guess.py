@@ -22,6 +22,7 @@ class InitialGuessGenerator:
         self.model = None
         self.branches = []
         self.automate_bifurcation_selection = automate_bifurcation_selection
+        self.selected_branch_index = None
 
     def generate_initial_guess(self, model: object):
         """
@@ -49,15 +50,19 @@ class InitialGuessGenerator:
                 self.branches, _ = compute_steady_state_curve(x0=self.steady_state, **kwargs)
 
             if self.automate_bifurcation_selection or len(self.branches) == 1:
-                idx = 0
+                self.selected_branch_index = 0
             else:
-                idx = int(input("Select a bifurcation point for continuation: "))
-                idx = idx - 1
+                self.selected_branch_index = int(
+                    input("Select a bifurcation point for continuation: ")
+                )
+                self.selected_branch_index = self.selected_branch_index - 1
 
             # Step 3: Get the exact bifurcation point from the approximation
             logger.info("Step 3: Get the exact bifurcation point from the approximation.")
             kwargs = {"model": self.model, "optimizer_name": "scipy"}
-            self.bifurcation_point = get_bifurcation_point(branch=self.branches[idx], **kwargs)
+            self.bifurcation_point = get_bifurcation_point(
+                branch=self.branches[self.selected_branch_index], **kwargs
+            )
 
             # Step 4: Continue the bifurcation point to trace the data
             logger.info("Step 4: Trace a two-parameter bifurcation diagram along the data.")
