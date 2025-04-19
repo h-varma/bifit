@@ -6,8 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(file_path, "../..")))
 
 from model_equations import Model
 from bifit.logging_ import logger
-from bifit.preprocessing.sampler import generate_samples_using_lhs
-from bifit.preprocessing.sampler import generate_samples_using_gaussian
 from bifit.preprocessing.preprocess_data import DataPreprocessor
 from bifit.estimation.initial_guess import InitialGuessGenerator
 from bifit.estimation.parameter_estimator import ParameterEstimator
@@ -21,110 +19,79 @@ def main():
     Main function to run the parameter estimation process.
 
     Steps:
-        1. Load the model and randomize parameters.
-        2. Generate samples using LHS or Gaussian sampling.
-        3. Preprocess the data and add noise.
-        4. Perform parameter estimation for each sample.
-        5. Save the results.
+        1. Load the model and parameters.
+        2. Load and preprocess the data.
+        3. Generate initial guesses for the optimization variables.
+        4. Solve parameter estimation problem.
+        5. Compute confidence intervals.
+        6. Save the results (optional).
 
-    Raises:
-        ValueError: If an unknown sampling method is specified.
+    If the process fails with the selected bifurcation point,
+    it re-tries with a different choice.
     """
+
     # Load the model and its settings
     model = Model()
 
-    # Create random initial guesses for the global parameters
-    number_of_parameter_guesses = 25
-    true_parameters = model.true_parameters
-    to_vary = model.global_parameters
-
-    sampling_strategy = "lhs"
-
-    if sampling_strategy == "lhs":
-        # Generate samples using latin hypercube sampling
-        bounds = {"k0": [0.001, 0.01], "k1": [0.1, 1]}
-        samples = generate_samples_using_lhs(
-            parameters=true_parameters, bounds=bounds, n_points=number_of_parameter_guesses
-        )
-    elif sampling_strategy == "gaussian":
-        # Generate samples using Gaussian distribution
-        samples = generate_samples_using_gaussian(
-            parameters=true_parameters,
-            to_vary=to_vary,
-            noise=1,
-            n_points=number_of_parameter_guesses,
-        )
-    else:
-        raise ValueError("Unknown sampling method.")
-
     # Preprocess the data
     data_preprocessor = DataPreprocessor()
-    # to load real measurement data with measurement errors, use function below instead:
+    # To load real measurement data with measurement errors, use function below instead:
     # data_preprocessor.load_the_data(file_path=file_path, error_scale=0.05)
     data_preprocessor.load_the_data_and_add_noise(file_path=file_path, error_scale=0.05)
     model.data = data_preprocessor.data
     model.data_weights = data_preprocessor.weights
-    data_entry = model.data[3]
 
-    for i in range(samples.shape[0]):
-        # Create a folder for storing the results
-        results_path = create_folder_for_results(file_path)
-        plot_decorator.save_plots = True
-        plot_decorator.show_plots = False
-        if plot_decorator.save_plots:
-            plot_decorator.save_path = results_path
+    # Create a folder for storing the results
+    results_path = create_folder_for_results(file_path)
+    plot_decorator.save_plots = True
+    plot_decorator.show_plots = True
+    if plot_decorator.save_plots:
+        plot_decorator.save_path = results_path
 
-        # Set the parameters of the model
-        model.set_parameters(controls=data_entry, parameters=samples[i, :])
+    # Initialize the initial guess generator
+    # Set automate_bifurcation_selection to True to automatically select a bifurcation point
+    initializer = InitialGuessGenerator(automate_bifurcation_selection=True)
 
-        model.mask = {
-            "compartments": False,
-            "controls": False,
-            "auxiliary_variables": False,
-            "global_parameters": False,
-        }
+    try_solving = True
+    while try_solving:
+        try:
+            # Initialize the parameters and controls of the model
+            model.set_parameters()
 
-        initializer = InitialGuessGenerator()
+            # Generate initial guesses for all the optimization variables
+            model.data = data_preprocessor.data
+            model.data_weights = data_preprocessor.weights
+            initializer.generate_initial_guess(model=model)
 
-        try_solving = True
-        while try_solving:
+            # Solve parameter estimation problem
+            fit = ParameterEstimator(
+                x0=initializer.initial_guesses,
+                model=model,
+                method="gauss-newton",
+                max_iters=100,
+                plot_iters=True,
+                compute_ci=True,
+            )
+
+            if fit.result.success:
+                logger.info("Successfully solved the parameter estimation problem.")
+                try_solving = False
+
+        except Exception as error_message:
+            logger.info("Retrying because of the following error:")
+            logger.info(repr(error_message))
+            fit = None
             try:
-                # Generate initial guesses for the parameter estimation
-                model.data = data_preprocessor.data
-                model.data_weights = data_preprocessor.weights
-                initializer.generate_initial_guess(model=model)
+                initializer.branches.pop(initializer.selected_branch_index)
+                model.mask["auxiliary_variables"] = False
+                model.mask["global_parameters"] = False
 
-                # Solve parameter estimation problem
-                fit = ParameterEstimator(
-                    x0=initializer.initial_guesses,
-                    model=model,
-                    method="gauss-newton",
-                    max_iters=100,
-                    plot_iters=True,
-                    compute_ci=True,
-                )
-
-                if fit.result.success:
-                    logger.info("Successfully solved the parameter estimation problem.")
+                if len(initializer.branches) == 0:
                     try_solving = False
-
-            except Exception as error_message:
-                logger.info("Retrying because of the following error:")
-                logger.info(repr(error_message))
-                fit = None
-                try:
-                    initializer.branches.pop(0)
-                    model.mask["auxiliary_variables"] = False
-                    model.mask["global_parameters"] = False
-                    for parameter_name, parameter_value in model.true_parameters.items():
-                        if parameter_name in model.global_parameters + [model.controls["free"]]:
-                            model.parameters[parameter_name]["vary"] = False
-                    if len(initializer.branches) == 0:
-                        try_solving = False
-                        logger.info("Tried all the available branches. Giving up.")
-                except Exception:
-                    try_solving = False
-                    logger.info("Failed to solve the parameter estimation problem. Giving up.")
+                    logger.info("Tried all the available branches. Giving up.")
+            except Exception:
+                try_solving = False
+                logger.info("Failed to solve the parameter estimation problem. Giving up.")
 
         save_results_as_pickle(model=model, res=fit, path=results_path)
 

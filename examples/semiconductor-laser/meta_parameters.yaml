@@ -34,7 +34,7 @@ to_plot: 'Ex'
 parameter_1:
   name: 'K'
   type: 'control_1'
-  default_value: 2
+  default_value: 6.4432
   min_value: -100
   max_value: 100
   step_size: 0.5  
@@ -42,12 +42,12 @@ parameter_1:
 parameter_2:
   name: 'alpha'
   type: 'global'
-  default_value: 2.6
+  default_value: 6.2535
 
 parameter_3:
   name: 'omega'
   type: 'control_2'
-  default_value: 2
+  default_value: -4.5445
 
 parameter_4:
   name: 'gamma'
@@ -57,4 +57,4 @@ parameter_4:
 parameter_5:
   name: 'B'
   type: 'global'
-  default_value: 0.0295
+  default_value: 0.0619

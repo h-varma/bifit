@@ -34,12 +34,12 @@ to_plot: 'A'
 parameter_1:
   name: 'k0'
   type: 'global'
-  default_value: 0.003
+  default_value: 0.0070
 
 parameter_2:
   name: 'k1'
   type: 'global'
-  default_value: 0.25
+  default_value: 0.6822
 
 parameter_3:
   name: 'k2'
@@ -59,12 +59,12 @@ parameter_5:
 parameter_6:
   name: 'I0'
   type: 'control_2'
-  default_value: 0.004
+  default_value: 0.0053
 
 parameter_7:
   name: 'S0'
   type: 'control_1'
-  default_value: 0.05
+  default_value: 0.1639
   min_value: 0.001
   max_value: 0.5
   step_size: 0.0001
