@@ -19,19 +19,13 @@ cd bifit
 pip install -r requirements.txt
 ```
 
-## Usage
-
-### Example Workflow
-
-**TODO**: Update this section with a correct code example.
-
-### Code Example
-
-**TODO**: Update this section with a correct code example.
-
 ## Documentation
 
-Comprehensive documentation is available at [https://h-varma.github.io/bifit/](https://h-varma.github.io/bifit/).
+Information about the various functions and classes can be found at [https://h-varma.github.io/bifit/](https://h-varma.github.io/bifit/). For further details on the numerical methods, their implementation and usage of the software, please refer to my [dissertation](https://archiv.ub.uni-heidelberg.de/volltextserver/36853/).
+
+## Citation
+
+If you use this software in your research or publications, please cite my [dissertation](https://archiv.ub.uni-heidelberg.de/volltextserver/36853/).
 
 ## License
 
