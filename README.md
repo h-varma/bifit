@@ -1,6 +1,6 @@
 # bifit: Bifurcation-Based Parameter Estimation
 
-`bifit` is a Python package designed for parameter estimation and *a posteriori* sensitivity analysis using measurements of applied controls at bifurcation points.
+`bifit` is a Python package designed for parameter estimation and *a posteriori* sensitivity analysis using measurements of applied controls at bifurcation points. This software was developed as part of my PhD research at Heidelberg University.
 
 ## Features
 
@@ -25,7 +25,7 @@ Information about the various functions and classes can be found at [https://h-v
 
 ## Citation
 
-If you use this software in your research or publications, please cite my [dissertation](https://archiv.ub.uni-heidelberg.de/volltextserver/36853/).
+If you use this software in your research or publications, please remember to cite my [dissertation](https://archiv.ub.uni-heidelberg.de/volltextserver/36853/).
 
 ## License
 
